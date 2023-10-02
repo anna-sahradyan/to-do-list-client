@@ -1,30 +1,44 @@
 import React, { useState } from "react";
-import { Nav, Title, Wrapper, WrapperToDoList } from "./taskStyled";
-import SearchIcon from "@mui/icons-material/Search";
+import { Nav, Title, Wrapper } from "./taskStyled";
 import { v4 as uuidv4 } from "uuid";
+import moment from "moment";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  Divider,
-  IconButton,
   Paper,
-  InputBase,
   TextField,
   FormControl,
 } from "@mui/material";
 import toast from "react-hot-toast";
+import UploadFile from "./UploadFile";
+import SearchTasks from "./SearchTasks";
+import MenuItem from "@mui/material/MenuItem";
 
-const CreateTask = ({ tasks, desc, setTasks, setDesc }) => {
+const CreateTask = ({ tasks, setTasks }) => {
+  const [flag, setFlag] = useState(true);
+  const [priority, setPriority] = useState("low");
+  const [subTaskInput, setSubTaskInput] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [image, setImage] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [dueDate, setDueDate] = useState("");
+  const [selectedFiles, setSelectedFiles] = useState(null);
   const [task, setTask] = useState({
-    id: " ",
-    title: " ",
-    body: " ",
+    id: uuidv4(),
+    title: "",
+    body: "",
     subTitle: "",
-    status: " ",
+    image: "",
+    status: "queue",
+    dueDate: "",
+    priority: "",
+    subTasks: [],
+    creationDate: moment().format("DD/MM/YY/HH:mm"),
+    files: selectedFiles,
   });
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -32,7 +46,21 @@ const CreateTask = ({ tasks, desc, setTasks, setDesc }) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleSubmit = () => {
+  const handleFileChange = e => {
+    const file = e.target.files[0];
+    setSelectedFiles(e.target.files[0].name);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const imageUrl = reader.result; // Get the data URL
+      setTask(prevTask => ({
+        ...prevTask,
+        image: imageUrl,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+  const handleSubmit = e => {
+    e.preventDefault();
     if (task.title.length < 3 || task.body.length < 3)
       return toast.error(
         "A task must have more than 3 characters in both title and body",
@@ -41,24 +69,36 @@ const CreateTask = ({ tasks, desc, setTasks, setDesc }) => {
       return toast.error(
         "A task must have less than 100 characters in both title and body",
       );
-    setTasks(prev => {
-      const list = [...prev, task];
+    const newTask = {
+      ...task,
+      dueDate: dueDate,
+      files: selectedFiles,
+      image: task.image,
+      priority: priority,
+    };
+    setTasks(prevTasks => {
+      const list = [...prevTasks, newTask];
       localStorage.setItem("tasks", JSON.stringify(list));
       return list;
     });
-
     toast.success("Task Created");
     setOpen(false);
     setTask({
-      id: uuidv4(),
+      id: "",
       title: "",
       body: "",
+      image: "",
       subTitle: "",
-      status: "",
+      status: "queue",
+      files: " ",
+      priority: "",
+      creationDate: moment().format("YY/DD/HH:mm"),
     });
+    setDueDate("");
+    setSelectedFiles(null);
   };
-  console.log(task.title);
-  console.log(task.body);
+
+  const handleAddSubTask = () => {};
   return (
     <>
       <Wrapper>
@@ -77,9 +117,7 @@ const CreateTask = ({ tasks, desc, setTasks, setDesc }) => {
                   maxRows={4}
                   sx={{ margin: 1 }}
                   value={task.title}
-                  onChange={e =>
-                    setTask({ ...task, id: uuidv4(), title: e.target.value })
-                  }
+                  onChange={e => setTask({ ...task, title: e.target.value })}
                 />
                 <TextField
                   id="outlined-multiline-flexible"
@@ -88,10 +126,46 @@ const CreateTask = ({ tasks, desc, setTasks, setDesc }) => {
                   maxRows={4}
                   sx={{ margin: 1 }}
                   value={task.body}
-                  onChange={e =>
-                    setTask({ ...task, id: uuidv4(), body: e.target.value })
-                  }
+                  onChange={e => setTask({ ...task, body: e.target.value })}
                 />
+                <TextField
+                  id="due-date"
+                  label="Due Date"
+                  type="datetime-local"
+                  sx={{ margin: 1 }}
+                  value={dueDate}
+                  onChange={e => {
+                    setDueDate(e.target.value);
+                  }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <TextField
+                  id="priority"
+                  label="Priority"
+                  select
+                  sx={{ margin: 1 }}
+                  value={priority}
+                  onChange={e => setPriority(e.target.value)}
+                >
+                  <MenuItem value="low">Low</MenuItem>
+                  <MenuItem value="medium">Medium</MenuItem>
+                  <MenuItem value="high">High</MenuItem>
+                </TextField>
+                {flag && (
+                  <>
+                    <TextField
+                      id="sub-task"
+                      label="Sub-Task"
+                      sx={{ margin: 1 }}
+                      value={subTaskInput}
+                      onChange={e => setSubTaskInput(e.target.value)}
+                    />
+                    <Button onClick={handleAddSubTask}>Add Sub-Task</Button>
+                  </>
+                )}
+                <UploadFile handleFileChange={handleFileChange} />
               </FormControl>
             </DialogContent>
             <DialogActions>
@@ -99,28 +173,8 @@ const CreateTask = ({ tasks, desc, setTasks, setDesc }) => {
               <Button onClick={handleSubmit}>Add</Button>
             </DialogActions>
           </Dialog>
-
-          <Paper
-            component="form"
-            sx={{
-              p: "2px 4px",
-              display: "flex",
-              alignItems: "center",
-              width: 400,
-            }}
-          >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search in your to-do list. "
-              inputProps={{ "aria-label": "search google maps" }}
-            />
-            <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          </Paper>
+          <SearchTasks tasks={tasks} task={task} setTasks={setTasks} />
         </Nav>
-        <WrapperToDoList></WrapperToDoList>
       </Wrapper>
     </>
   );

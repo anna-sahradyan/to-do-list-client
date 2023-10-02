@@ -1,61 +1,39 @@
-// import React, { useEffect, useState } from "react";
-// import { WrapperToDoList } from "./taskStyled";
-// import Task from "./Task";
-//
-// const TasksLists = ({ tasks, setTasks }) => {
-//   const [todos, setTodos] = useState([]);
-//   const [queue, setQueue] = useState([]);
-//   const [development, setDevelopment] = useState([]);
-//   const [done, setDone] = useState([]);
-//   useEffect(() => {
-//     const filterTodos = tasks.filter(task => task.status === "todo");
-//     const filterQueue = tasks.filter(task => task.status === "queue");
-//     const filterDev = tasks.filter(task => task.status === "dev");
-//     const filterDone = tasks.filter(task => task.status === "done");
-//     setTodos(filterTodos);
-//     setDone(filterDone);
-//     setDevelopment(filterDev);
-//     setQueue(filterQueue);
-//   }, [tasks]);
-//   const statuses = ["todo", "queue", "dev", "done"];
-//   return (
-//     <WrapperToDoList>
-//       {statuses.map((status, index) => (
-//         <Task key={index} status={status} />
-//       ))}
-//     </WrapperToDoList>
-//   );
-// };
-//
-// export default TasksLists;
-//
 import React, { useEffect, useState } from "react";
 import { WrapperToDoList } from "./taskStyled";
-import Task from "./Task"; // Assuming Task component exists
+import Task from "./Task";
 
 const TasksLists = ({ tasks, setTasks }) => {
-  const [todos, setTodos] = useState([]);
   const [queue, setQueue] = useState([]);
   const [development, setDevelopment] = useState([]);
   const [done, setDone] = useState([]);
-
+  const statuses = ["queue", "development", "done"];
   useEffect(() => {
-    const filterTodos = tasks.filter((task) => task.status === "todo");
-    const filterQueue = tasks.filter((task) => task.status === "queue");
-    const filterDev = tasks.filter((task) => task.status === "dev");
-    const filterDone = tasks.filter((task) => task.status === "done");
-    setTodos(filterTodos);
-    setDone(filterDone);
-    setDevelopment(filterDev);
-    setQueue(filterQueue);
+    if (Array.isArray(tasks)) {
+      //! Check if tasks is an array
+      const filterQueue = tasks.filter(task => task.status === "queue");
+      const filterDev = tasks.filter(task => task.status === "development");
+      const filterDone = tasks.filter(task => task.status === "done");
+      setDone(filterDone);
+      setDevelopment(filterDev);
+      setQueue(filterQueue);
+    }
   }, [tasks]);
-
-  const statuses = ["todo", "queue", "dev", "done"];
 
   return (
     <WrapperToDoList>
       {statuses.map((status, index) => (
-        <Task key={index} status={status} />
+        <Task
+          key={index}
+          status={status}
+          tasks={tasks}
+          setTasks={setTasks}
+          queue={queue}
+          setQueue={setQueue}
+          done={done}
+          setDone={setDone}
+          development={development}
+          setDevelopment={setDevelopment}
+        />
       ))}
     </WrapperToDoList>
   );
