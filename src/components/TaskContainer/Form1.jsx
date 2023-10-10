@@ -16,7 +16,7 @@ import UploadFile from "./UploadFile";
 import SearchTasks from "./SearchTasks";
 import MenuItem from "@mui/material/MenuItem";
 
-const CreateTask = ({ tasks, setTasks }) => {
+const Form1 = ({ tasks, setTasks }) => {
   const [flag, setFlag] = useState(false);
   const [priority, setPriority] = useState("low");
   const [subTaskInput, setSubTaskInput] = useState([]);
@@ -202,4 +202,4 @@ const CreateTask = ({ tasks, setTasks }) => {
   );
 };
 
-export default CreateTask;
+export default Form1;
