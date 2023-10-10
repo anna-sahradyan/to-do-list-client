@@ -115,7 +115,12 @@ export const TaskHidden = styled.div`
     //opacity: 1;
   }
 `;
-export const TaskIndex = styled.div`
+export const TaskHeader = styled.div`
+  width: 100%;
+  height: 40px;
+  display: flex;
+`;
+export const TaskIndex = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -125,7 +130,10 @@ export const TaskIndex = styled.div`
   border-radius: 50%;
   font-size: 14px;
   color: black;
-  margin: -30px 0 2px 90%;
+`;
+export const TaskPriority = styled.span`
+  margin-left: 50px;
+  font-size: 16px;
 `;
 export const TaskInfo = styled.div`
   width: 100%;
@@ -133,14 +141,15 @@ export const TaskInfo = styled.div`
   flex-grow: 1;
   overflow: hidden;
 `;
-export const TaskPriority = styled.span`
-  margin-left: 30px;
-`;
+
 export const TaskTitle = styled.h1`
   font-size: 18px;
   border-bottom: 2px dashed #ab907f;
   color: #ab907f;
   margin-bottom: 5px;
+  max-height: 70px;
+  overflow: hidden;
+  word-wrap: break-word;
 `;
 export const TaskData = styled.div`
   margin-top: auto;
@@ -155,6 +164,8 @@ export const TaskBody = styled.div`
   color: #54371b;
   font-size: 16px;
 `;
+export const SubTasksUl = styled.ul``;
+export const SubTaskLi = styled.li``;
 export const TaskDown = styled.div`
   display: flex;
 `;
@@ -178,6 +189,27 @@ export const Status = styled.div`
   width: 30%;
   color: white;
 `;
+export const PartDrawer = styled.div`
+  width: 90%;
+  border: 1px solid red;
+`;
+export const TitleDrawer = styled.h1`
+  color: white;
+`;
+export const TaskTitleDrawer = styled.h2`
+  color: white;
+`;
+export const TaskDescDrawer = styled.div`
+  color: white;
+`;
+export const TaskSubTask = styled.p`
+  color: white;
+`;
+export const TaskSubTaskUl = styled.ul``;
+export const TaskSubTaskLi = styled.li`
+  color: black;
+`;
+
 /*SearchTask Component*/
 
 export const SearchBox = styled.div`

@@ -18,9 +18,6 @@ import toast from "react-hot-toast";
 const Form = ({ tasks, setTasks }) => {
   const [flag, setFlag] = useState(false);
   const [priority, setPriority] = useState("low");
-  const [subTaskInput, setSubTaskInput] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [image, setImage] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [dueDate, setDueDate] = useState("");
   const [selectedFiles, setSelectedFiles] = useState(null);
@@ -33,11 +30,10 @@ const Form = ({ tasks, setTasks }) => {
     status: "queue",
     dueDate: "",
     priority: "",
-    subTasks: [],
+    subTasks: "",
     creationDate: moment().format("DD/MM/YY/HH:mm"),
     files: selectedFiles,
   });
-
   const handleClickOpen = () => {
     setOpen(true);
     setFlag(true);
@@ -92,12 +88,27 @@ const Form = ({ tasks, setTasks }) => {
       status: "queue",
       files: " ",
       priority: "",
+      subTasks: [],
       creationDate: moment().format("YY/DD/HH:mm"),
     });
     setDueDate("");
     setSelectedFiles(null);
   };
-  const handleAddSubTask = () => {};
+  // const handleAddSubTask = () => {
+  //   if (!task.subTasks) {
+  //     setTask({ ...task, subTasks: [""] });
+  //   } else {
+  //     setTask({ ...task, subTasks: [...task.subTasks, ""] });
+  //   }
+  // };
+  const handleAddSubTask = () => {
+    if (task.subTasks.trim() === "") {
+      toast("Please enter at least one sub-task.");
+      return;
+    }
+
+    setTask({ ...task, subTasks: task.subTasks + "\n" });
+  };
   return (
     <>
       <Paper>
@@ -154,10 +165,11 @@ const Form = ({ tasks, setTasks }) => {
               <>
                 <TextField
                   id="sub-task"
-                  label="Sub-Task"
+                  label="Sub-Tasks"
+                  multiline
                   sx={{ margin: 1 }}
-                  value={subTaskInput}
-                  onChange={e => setSubTaskInput(e.target.value)}
+                  value={task.subTasks}
+                  onChange={e => setTask({ ...task, subTasks: e.target.value })}
                 />
                 <Button onClick={handleAddSubTask}>Add Sub-Task</Button>
                 <UploadFile handleFileChange={handleFileChange} />

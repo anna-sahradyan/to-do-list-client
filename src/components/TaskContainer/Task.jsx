@@ -19,27 +19,30 @@ const Task = ({
   tasks,
   setTasks,
   queue,
-  setQueue,
   done,
-  setDone,
   development,
   setDevelopment,
   creationDate,
 }) => {
   //?part of drag  DND
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: "task", // Define the accepted type
-    drop: item => addItemToSection(item.id),
+    accept: "task",
+    drop: item => {
+      addItemToSection(item.id);
+    },
     collect: monitor => ({
       isOver: !!monitor.isOver(),
     }),
   }));
-
+  const draggingStyles = {
+    opacity: isOver ? 0.3 : 1,
+  };
   const addItemToSection = id => {
     if (id) {
       setTasks(prev => {
         const mTasks = prev.map(task => {
           if (task.id === id) {
+            console.log(`Updating task status to: ${status}`);
             return { ...task, status: status };
           }
           return task;
@@ -104,24 +107,19 @@ export default Task;
 
 const Header = ({ text, count, bg, setTasks }) => {
   const handleClearAll = () => {
-    // Check if there's anything in localStorage
     const storedTasks = JSON.parse(localStorage.getItem("tasks"));
     if (storedTasks && Array.isArray(storedTasks) && storedTasks.length > 0) {
-      // Use a browser-native confirmation dialog
       const userConfirmed = window.confirm(
         "Are you sure you want to clear all tasks?",
       );
       if (userConfirmed) {
         localStorage.clear();
         setTasks([]);
-        // Perform any additional actions after clearing, if needed
         toast("All tasks cleared", { icon: "👍" });
       } else {
-        // User cancelled the clear operation
         toast("Clear operation cancelled", { icon: "🚫" });
       }
     } else {
-      // No items in localStorage
       toast("No tasks to clear.", { icon: "🙄" });
     }
   };

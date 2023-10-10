@@ -14,6 +14,9 @@ import {
   TaskInfo,
   TaskTitle,
   TaskPriority,
+  SubTasksUl,
+  SubTaskLi,
+  TaskHeader,
 } from "./taskStyled";
 import moment from "moment";
 
@@ -46,18 +49,24 @@ const TaskModalContainer = ({ tasks, task, setTasks, index }) => {
     <>
       <TaskComponentContainer ref={drag} style={draggingStyles}>
         <TaskInfo>
-          <TaskTitle>
-            {task.title}
+          <TaskHeader>
+            <TaskIndex>{index + 1}</TaskIndex>
             <TaskPriority style={{ color: priorityColor }}>
               {task.priority}
             </TaskPriority>
-            <TaskIndex>{index + 1}</TaskIndex>
-          </TaskTitle>
+          </TaskHeader>
+          <TaskTitle>{task.title}</TaskTitle>
+          {task.subTasks && task.subTasks.trim() !== "" && (
+            <SubTasksUl>
+              {task.subTasks.split("\n").map((subTask, index) => (
+                <SubTaskLi key={index}>{subTask}</SubTaskLi>
+              ))}
+            </SubTasksUl>
+          )}
           <TaskBody>
             {task.body}
             <Image src={task.image} alt="" style={{ maxWidth: "30%" }} />
             <Files>{task.files}</Files>
-
             <Due>
               Deadline::{moment(task.dueDate).format("MMMM D, YYYY h:mm A")}
             </Due>

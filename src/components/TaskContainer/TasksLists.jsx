@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { WrapperToDoList } from "./taskStyled";
 import Task from "./Task";
 
-const TasksLists = ({ tasks, setTasks }) => {
+const TasksLists = ({ tasks, setTasks, task, setTask }) => {
   const [queue, setQueue] = useState([]);
   const [development, setDevelopment] = useState([]);
   const [done, setDone] = useState([]);
   const statuses = ["queue", "development", "done"];
   useEffect(() => {
-    if (Array.isArray(tasks)) {
+    if (tasks) {
       //! Check if tasks is an array
       const filterQueue = tasks.filter(task => task.status === "queue");
       const filterDev = tasks.filter(task => task.status === "development");
@@ -33,6 +33,8 @@ const TasksLists = ({ tasks, setTasks }) => {
           setDone={setDone}
           development={development}
           setDevelopment={setDevelopment}
+          task={task}
+          setTask={setTask}
         />
       ))}
     </WrapperToDoList>
