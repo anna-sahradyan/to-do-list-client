@@ -10,7 +10,7 @@
 
 # production
 /build
-/TaskContainer/From1.jsx
+
 # misc
 .DS_Store
 .env.local
@@ -21,3 +21,5 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+# Exclude TaskContainer/From1.jsx relative to the root
+TaskContainer/From1.jsx
