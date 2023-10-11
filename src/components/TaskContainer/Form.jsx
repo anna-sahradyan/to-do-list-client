@@ -94,21 +94,23 @@ const Form = ({ tasks, setTasks }) => {
     setDueDate("");
     setSelectedFiles(null);
   };
-  // const handleAddSubTask = () => {
-  //   if (!task.subTasks) {
-  //     setTask({ ...task, subTasks: [""] });
-  //   } else {
-  //     setTask({ ...task, subTasks: [...task.subTasks, ""] });
-  //   }
-  // };
-  const handleAddSubTask = () => {
-    if (task.subTasks.trim() === "") {
-      toast("Please enter at least one sub-task.");
-      return;
-    }
 
-    setTask({ ...task, subTasks: task.subTasks + "\n" });
+  const handleAddSubTask = () => {
+    let subTasksArray = (task.subTasks || "").toString(); // Преобразуем в строку
+    subTasksArray = subTasksArray.split("\n").map(subTask => subTask.trim());
+
+    const nonEmptySubTasks = subTasksArray.filter(subTask => subTask !== "");
+
+    if (
+      nonEmptySubTasks.length === 0 ||
+      nonEmptySubTasks.every(subTask => subTask === "")
+    ) {
+      toast("Please enter at least one sub-task.");
+    } else {
+      setTask({ ...task, subTasks: nonEmptySubTasks.join("\n") });
+    }
   };
+
   return (
     <>
       <Paper>

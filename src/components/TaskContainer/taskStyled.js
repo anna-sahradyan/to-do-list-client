@@ -165,7 +165,14 @@ export const TaskBody = styled.div`
   font-size: 16px;
 `;
 export const SubTasksUl = styled.ul``;
-export const SubTaskLi = styled.li``;
+export const CheckboxInput = styled.input``;
+export const SubTaskBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+export const SubTaskLi = styled.li`
+  color: ${props => (props["data-iscomplete"] ? "red" : "")};
+`;
 export const TaskDown = styled.div`
   display: flex;
 `;
@@ -205,7 +212,9 @@ export const TaskDescDrawer = styled.div`
 export const TaskSubTask = styled.p`
   color: white;
 `;
-export const TaskSubTaskUl = styled.ul``;
+export const TaskSubTaskUl = styled.ul`
+  display: flex;
+`;
 export const TaskSubTaskLi = styled.li`
   color: black;
 `;

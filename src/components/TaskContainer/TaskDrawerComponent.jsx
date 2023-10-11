@@ -94,7 +94,6 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
                   task.subTasks.length > 0 && (
                     <TaskSubTaskUl>
                       {task.subTasks.map((subTask, index) => {
-                        console.log(subTask); // Log the subTask value to the console
                         return (
                           <TaskSubTaskLi key={index}>{subTask}</TaskSubTaskLi>
                         );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import TaskDrawerComponent from "./TaskDrawerComponent";
 import { useDrag } from "react-dnd";
 import {
@@ -17,10 +17,27 @@ import {
   SubTasksUl,
   SubTaskLi,
   TaskHeader,
+  CheckboxInput,
+  SubTaskBox,
 } from "./taskStyled";
 import moment from "moment";
 
 const TaskModalContainer = ({ tasks, task, setTasks, index }) => {
+  const [isChecked, setIsChecked] = useState({});
+
+  const handleCheckboxChange = taskId => {
+    setIsChecked(prevState => ({
+      ...prevState,
+      [taskId]: !prevState[taskId],
+    }));
+  };
+
+  const handleTextClick = taskId => {
+    setIsChecked(prevState => ({
+      ...prevState,
+      [taskId]: !prevState[taskId],
+    }));
+  };
   //?part of drag  DND
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "task",
@@ -59,7 +76,26 @@ const TaskModalContainer = ({ tasks, task, setTasks, index }) => {
           {task.subTasks && task.subTasks.trim() !== "" && (
             <SubTasksUl>
               {task.subTasks.split("\n").map((subTask, index) => (
-                <SubTaskLi key={index}>{subTask}</SubTaskLi>
+                <SubTaskBox key={index}>
+                  <CheckboxInput
+                    type="checkbox"
+                    id={`todoComplete_${index}`}
+                    checked={isChecked[index] || false}
+                    onChange={() => handleCheckboxChange(index)}
+                  />
+                  <SubTaskLi
+                    id={`todoComplete_${index}`}
+                    onClick={() => handleTextClick(index)}
+                    style={{
+                      textDecoration: isChecked[index]
+                        ? "line-through"
+                        : "none",
+                    }}
+                    data-iscomplete={isChecked[index]}
+                  >
+                    {subTask}
+                  </SubTaskLi>
+                </SubTaskBox>
               ))}
             </SubTasksUl>
           )}
