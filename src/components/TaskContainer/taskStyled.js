@@ -165,6 +165,7 @@ export const TaskBody = styled.div`
   font-size: 16px;
 `;
 export const SubTasksUl = styled.ul``;
+
 export const CheckboxInput = styled.input``;
 export const SubTaskBox = styled.div`
   display: flex;

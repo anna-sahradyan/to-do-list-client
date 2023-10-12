@@ -16,15 +16,10 @@ import {
   TaskTitleDrawer,
   TitleDrawer,
 } from "./taskStyled";
-import * as PropTypes from "prop-types";
 
-const options = [
-  "Sub Tasks",
-  "Delete",
-  "File",
-  " Write Comments",
-  "Edit Property",
-];
+import moment from "moment";
+
+const options = ["Delete", " Write Comments"];
 
 const ITEM_HEIGHT = 48;
 
@@ -36,7 +31,15 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
   const open = Boolean(anchorEl);
   const [edit, setEdit] = useState({
     id: null,
-    value: "",
+    title: "",
+    body: "",
+    image: "",
+    subTitle: "",
+    status: "queue",
+    files: " ",
+    priority: "",
+    subTasks: [],
+    creationDate: moment().format("YY/DD/HH:mm"),
   });
   //!part move
   const handleClick = event => {
@@ -45,6 +48,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   //?open and close drawer and delete
   const openModal = option => {
     setSelectedOption(option);
@@ -59,12 +63,51 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
     } else {
       setIsDrawerOpen(true);
     }
-    // if (option === "Edit Property") {
-    //   const id = task.id;
-    // }
   };
-  //?part of edit
-
+  //?part of edit with submit
+  const submitUpdate = (taskId, newValue) => {
+    updateTask(taskId, newValue);
+    setEdit({
+      id: null,
+      title: "",
+      body: "",
+      image: "",
+      subTitle: "",
+      status: "queue",
+      files: " ",
+      priority: "",
+      subTasks: [],
+      creationDate: moment().format("YY/DD/HH:mm"),
+    });
+  };
+  //!update todo list
+  const updateTask = (taskId, newValue) => {
+    setTasks(prevTasks => {
+      return prevTasks.map(todo => {
+        if (todo.id === taskId) {
+          return {
+            ...todo,
+            title: newValue.title || todo.title,
+            body: newValue.body || todo.body,
+            image: newValue.image || todo.image,
+            subTitle: newValue.subTitle || todo.subTitle,
+            status: newValue.status || todo.status,
+            files: newValue.files || todo.files,
+            priority: newValue.priority || todo.priority,
+            subTasks: newValue.subTasks || todo.subTasks,
+            creationDate: newValue.creationDate || todo.creationDate,
+          };
+        } else {
+          return todo;
+        }
+      });
+    });
+    console.log(newValue);
+  };
+  const handleEditClick = taskToEdit => {
+    setEdit(taskToEdit);
+    setIsDrawerOpen(true);
+  };
   return (
     <>
       <Drawer
@@ -84,7 +127,13 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
         <Box p={2} width="600px" role="presentation">
           <PartDrawer>
             <TitleDrawer>this is the task you chose</TitleDrawer>
-            <Form tasks={tasks} setTasks={setTasks} />
+            <Form
+              tasks={tasks}
+              setTasks={setTasks}
+              submitUpdate={submitUpdate}
+              edit={edit}
+              setEdit={setEdit}
+            />
             {task && (
               <>
                 <TaskTitleDrawer>Task Title: {task.title}</TaskTitleDrawer>
@@ -105,7 +154,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
           </PartDrawer>
         </Box>
       </Drawer>
-      <BorderColorOutlinedIcon />
+      <BorderColorOutlinedIcon onClick={() => handleEditClick(task)} />
       <IconButton
         aria-label="more"
         id="long-button"

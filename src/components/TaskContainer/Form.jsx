@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -15,25 +15,34 @@ import { v4 as uuidv4 } from "uuid";
 import moment from "moment/moment";
 import toast from "react-hot-toast";
 
-const Form = ({ tasks, setTasks }) => {
+const Form = ({ tasks, setTasks, submitUpdate, setEdit, edit }) => {
   const [flag, setFlag] = useState(false);
   const [priority, setPriority] = useState("low");
   const [open, setOpen] = React.useState(false);
   const [dueDate, setDueDate] = useState("");
   const [selectedFiles, setSelectedFiles] = useState(null);
-  const [task, setTask] = useState({
-    id: uuidv4(),
-    title: "",
-    body: "",
-    subTitle: "",
-    image: "",
-    status: "queue",
-    dueDate: "",
-    priority: "",
-    subTasks: "",
-    creationDate: moment().format("DD/MM/YY/HH:mm"),
-    files: selectedFiles,
+  const [task, setTask] = useState(() => {
+    const defaultTask = {
+      id: uuidv4(),
+      title: "",
+      body: "",
+      subTitle: "",
+      image: "",
+      status: "queue",
+      dueDate: "",
+      priority: "",
+      subTasks: "",
+      creationDate: moment().format("DD/MM/YY/HH:mm"),
+      files: selectedFiles,
+    };
+
+    return edit ? { ...defaultTask, ...edit } : defaultTask;
   });
+  useEffect(() => {
+    if (edit && edit.id) {
+      setTask({ ...task, ...edit });
+    }
+  }, [edit]);
   const handleClickOpen = () => {
     setOpen(true);
     setFlag(true);
@@ -47,7 +56,7 @@ const Form = ({ tasks, setTasks }) => {
     setSelectedFiles(e.target.files[0].name);
     const reader = new FileReader();
     reader.onloadend = () => {
-      const imageUrl = reader.result; // Get the data URL
+      const imageUrl = reader.result;
       setTask(prevTask => ({
         ...prevTask,
         image: imageUrl,
@@ -57,27 +66,31 @@ const Form = ({ tasks, setTasks }) => {
   };
   const handleSubmit = e => {
     e.preventDefault();
-    if (task.title.length < 3 || task.body.length < 3)
-      return toast.error(
-        "A task must have more than 3 characters in both title and body",
-      );
-    if (task.title.length > 100 || task.body.length > 100)
-      return toast.error(
-        "A task must have less than 100 characters in both title and body",
-      );
-    const newTask = {
-      ...task,
-      dueDate: dueDate,
-      files: selectedFiles,
-      image: task.image,
-      priority: priority,
-    };
-    setTasks(prev => {
-      const list = [...prev, newTask];
-      localStorage.setItem("tasks", JSON.stringify(list));
-      return list;
-    });
-    toast.success("Task Created");
+    if (edit && edit.id) {
+      submitUpdate(edit.id, task);
+    } else {
+      if (task.title.length < 3 || task.body.length < 3)
+        return toast.error(
+          "A task must have more than 3 characters in both title and body",
+        );
+      if (task.title.length > 100 || task.body.length > 100)
+        return toast.error(
+          "A task must have less than 100 characters in both title and body",
+        );
+      const newTask = {
+        ...task,
+        dueDate: dueDate,
+        files: selectedFiles,
+        image: task.image,
+        priority: priority,
+      };
+      setTasks(prev => {
+        const list = [...prev, newTask];
+        localStorage.setItem("tasks", JSON.stringify(list));
+        return list;
+      });
+      toast.success("Task Created");
+    }
     setOpen(false);
     setTask({
       id: "",
@@ -96,7 +109,7 @@ const Form = ({ tasks, setTasks }) => {
   };
 
   const handleAddSubTask = () => {
-    let subTasksArray = (task.subTasks || "").toString(); // Преобразуем в строку
+    let subTasksArray = (task.subTasks || "").toString();
     subTasksArray = subTasksArray.split("\n").map(subTask => subTask.trim());
 
     const nonEmptySubTasks = subTasksArray.filter(subTask => subTask !== "");
