@@ -24,7 +24,6 @@ import moment from "moment";
 
 const TaskModalContainer = ({ tasks, task, setTasks, index }) => {
   const [isChecked, setIsChecked] = useState({});
-
   const handleCheckboxChange = taskId => {
     setIsChecked(prevState => ({
       ...prevState,
@@ -103,9 +102,7 @@ const TaskModalContainer = ({ tasks, task, setTasks, index }) => {
             {task.body}
             <Image src={task.image} alt="" style={{ maxWidth: "30%" }} />
             <Files>{task.files}</Files>
-            <Due>
-              Deadline::{moment(task.dueDate).format("MMMM D, YYYY h:mm A")}
-            </Due>
+            <Due>Deadline::{moment(task.dueDate).format("YY/DD/MM/HH:mm")}</Due>
           </TaskBody>
         </TaskInfo>
         <TaskDown>

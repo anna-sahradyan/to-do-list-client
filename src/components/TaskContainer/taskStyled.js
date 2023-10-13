@@ -156,6 +156,7 @@ export const TaskData = styled.div`
   color: #267cb5;
   font-size: 15px;
   font-weight: 600;
+  margin-left: 10px;
 `;
 export const TaskBody = styled.div`
   max-height: 180px;

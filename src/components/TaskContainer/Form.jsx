@@ -15,11 +15,9 @@ import { v4 as uuidv4 } from "uuid";
 import moment from "moment/moment";
 import toast from "react-hot-toast";
 
-const Form = ({ tasks, setTasks, submitUpdate, setEdit, edit }) => {
+const Form = ({ tasks, setTasks, submitUpdate, edit }) => {
   const [flag, setFlag] = useState(false);
-  const [priority, setPriority] = useState("low");
   const [open, setOpen] = React.useState(false);
-  const [dueDate, setDueDate] = useState("");
   const [selectedFiles, setSelectedFiles] = useState(null);
   const [task, setTask] = useState(() => {
     const defaultTask = {
@@ -29,7 +27,7 @@ const Form = ({ tasks, setTasks, submitUpdate, setEdit, edit }) => {
       subTitle: "",
       image: "",
       status: "queue",
-      dueDate: "",
+      dueDate: moment().format("DD/MM/YY/HH:mm"),
       priority: "",
       subTasks: "",
       creationDate: moment().format("DD/MM/YY/HH:mm"),
@@ -79,10 +77,8 @@ const Form = ({ tasks, setTasks, submitUpdate, setEdit, edit }) => {
         );
       const newTask = {
         ...task,
-        dueDate: dueDate,
         files: selectedFiles,
         image: task.image,
-        priority: priority,
       };
       setTasks(prev => {
         const list = [...prev, newTask];
@@ -101,10 +97,10 @@ const Form = ({ tasks, setTasks, submitUpdate, setEdit, edit }) => {
       status: "queue",
       files: " ",
       priority: "",
+      dueDate: moment().format("YY/DD/HH:mm"),
       subTasks: [],
       creationDate: moment().format("YY/DD/HH:mm"),
     });
-    setDueDate("");
     setSelectedFiles(null);
   };
 
@@ -156,9 +152,9 @@ const Form = ({ tasks, setTasks, submitUpdate, setEdit, edit }) => {
               label="Due Date"
               type="datetime-local"
               sx={{ margin: 1 }}
-              value={dueDate}
+              value={task.dueDate}
               onChange={e => {
-                setDueDate(e.target.value);
+                setTask({ ...task, dueDate: e.target.value });
               }}
               InputLabelProps={{
                 shrink: true,
@@ -169,8 +165,8 @@ const Form = ({ tasks, setTasks, submitUpdate, setEdit, edit }) => {
               label="Priority"
               select
               sx={{ margin: 1 }}
-              value={priority}
-              onChange={e => setPriority(e.target.value)}
+              value={task.priority}
+              onChange={e => setTask({ ...task, priority: e.target.value })}
             >
               <MenuItem value="low">Low</MenuItem>
               <MenuItem value="medium">Medium</MenuItem>

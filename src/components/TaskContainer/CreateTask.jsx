@@ -14,7 +14,7 @@ const CreateTask = ({ tasks, setTasks }) => {
     subTitle: "",
     image: "",
     status: "queue",
-    dueDate: "",
+    dueDate: moment().format("YY/DD/HH:mm"),
     priority: "",
     subTasks: "",
     creationDate: moment().format("DD/MM/YY/HH:mm"),

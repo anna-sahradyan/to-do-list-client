@@ -21,7 +21,6 @@ const Task = ({
   queue,
   done,
   development,
-  setDevelopment,
   creationDate,
 }) => {
   //?part of drag  DND
@@ -91,7 +90,7 @@ const Task = ({
         tasksToMap.map((task, index) => {
           return (
             <TaskModalContainer
-              key={task.id}
+              key={index}
               tasks={tasks}
               task={task}
               setTasks={setTasks}

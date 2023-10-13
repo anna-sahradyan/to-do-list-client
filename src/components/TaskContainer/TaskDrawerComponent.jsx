@@ -36,7 +36,8 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
     image: "",
     subTitle: "",
     status: "queue",
-    files: " ",
+    files: "",
+    dueDate: moment().format("YY/DD/HH:mm"),
     priority: "",
     subTasks: [],
     creationDate: moment().format("YY/DD/HH:mm"),
@@ -76,6 +77,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
       status: "queue",
       files: " ",
       priority: "",
+      dueDate: moment().format("DD/MM/YY HH:mm"),
       subTasks: [],
       creationDate: moment().format("YY/DD/HH:mm"),
     });
@@ -93,6 +95,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
             subTitle: newValue.subTitle || todo.subTitle,
             status: newValue.status || todo.status,
             files: newValue.files || todo.files,
+            dueDate: newValue.dueDate || todo.dueDate,
             priority: newValue.priority || todo.priority,
             subTasks: newValue.subTasks || todo.subTasks,
             creationDate: newValue.creationDate || todo.creationDate,
@@ -105,7 +108,20 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
     console.log(newValue);
   };
   const handleEditClick = taskToEdit => {
-    setEdit(taskToEdit);
+    setEdit({
+      id: taskToEdit.id,
+      title: taskToEdit.title,
+      body: taskToEdit.body,
+      image: taskToEdit.image,
+      dueDate: taskToEdit.dueDate,
+      subTitle: taskToEdit.subTitle,
+      status: taskToEdit.status,
+      files: taskToEdit.files,
+      priority: taskToEdit.priority,
+      subTasks: taskToEdit.subTasks,
+      creationDate: taskToEdit.creationDate,
+    });
+    console.log(taskToEdit);
     setIsDrawerOpen(true);
   };
   return (
