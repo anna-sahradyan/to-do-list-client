@@ -19,6 +19,7 @@ import {
   TaskHeader,
   CheckboxInput,
   SubTaskBox,
+  FilePart,
 } from "./taskStyled";
 import moment from "moment";
 
@@ -100,13 +101,25 @@ const TaskModalContainer = ({ tasks, task, setTasks, index }) => {
           )}
           <TaskBody>
             {task.body}
-            <Image src={task.image} alt="" style={{ maxWidth: "30%" }} />
-            <Files>{task.files}</Files>
-            <Due>Deadline::{moment(task.dueDate).format("YY/DD/MM/HH:mm")}</Due>
+            <FilePart>
+              <Image src={task.image} alt="" style={{ maxWidth: "30%" }} />
+              <Files>{task.files}</Files>
+            </FilePart>
+            <Due>
+              Deadline:
+              {task.dueDate
+                ? moment(task.dueDate).format("YY/DD/HH:mm")
+                : "No due date"}
+            </Due>
           </TaskBody>
         </TaskInfo>
         <TaskDown>
-          <TaskData>Initiate::{task.creationDate}</TaskData>
+          <TaskData>
+            Initiate:{" "}
+            {task.creationDate
+              ? moment(task.dueDate).format("YY/DD/HH:mm")
+              : "No creationDate date"}
+          </TaskData>
           <TaskHidden>
             <TaskDrawerComponent
               task={task}

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 export const Header = styled.div`
   margin: 20px;
-  border: 1px solid red;
   text-align: center;
   align-items: center;
 `;

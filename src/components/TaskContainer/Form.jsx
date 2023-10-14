@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import moment from "moment/moment";
 import toast from "react-hot-toast";
 
-const Form = ({ tasks, setTasks, submitUpdate, edit }) => {
+const Form = ({ setTasks, submitUpdate, edit }) => {
   const [flag, setFlag] = useState(false);
   const [open, setOpen] = React.useState(false);
   const [selectedFiles, setSelectedFiles] = useState(null);
@@ -27,10 +27,10 @@ const Form = ({ tasks, setTasks, submitUpdate, edit }) => {
       subTitle: "",
       image: "",
       status: "queue",
-      dueDate: moment().format("DD/MM/YY/HH:mm"),
+      dueDate: moment().format("YY/DD/HH:mm"),
       priority: "",
       subTasks: "",
-      creationDate: moment().format("DD/MM/YY/HH:mm"),
+      creationDate: moment().format("YY/DD/HH:mm"),
       files: selectedFiles,
     };
 
@@ -172,21 +172,16 @@ const Form = ({ tasks, setTasks, submitUpdate, edit }) => {
               <MenuItem value="medium">Medium</MenuItem>
               <MenuItem value="high">High</MenuItem>
             </TextField>
-            {flag && (
-              <>
-                <TextField
-                  id="sub-task"
-                  label="Sub-Tasks"
-                  multiline
-                  sx={{ margin: 1 }}
-                  value={task.subTasks}
-                  onChange={e => setTask({ ...task, subTasks: e.target.value })}
-                />
-                <Button onClick={handleAddSubTask}>Add Sub-Task</Button>
-                <UploadFile handleFileChange={handleFileChange} />
-              </>
-            )}
-            {/*<UploadFile handleFileChange={handleFileChange} />*/}
+            <TextField
+              id="sub-task"
+              label="Sub-Tasks"
+              multiline
+              sx={{ margin: 1 }}
+              value={task.subTasks}
+              onChange={e => setTask({ ...task, subTasks: e.target.value })}
+            />
+            <Button onClick={handleAddSubTask}>Add Sub-Task</Button>
+            <UploadFile handleFileChange={handleFileChange} />
           </FormControl>
         </DialogContent>
         <DialogActions>

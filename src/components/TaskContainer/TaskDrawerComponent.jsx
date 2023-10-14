@@ -6,15 +6,30 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Box, Drawer } from "@mui/material";
 import toast from "react-hot-toast";
-
+import Comment from "./Comment";
 import Form from "./Form";
+
 import {
+  FormPart,
+  Img,
+  ListPart,
   PartDrawer,
+  PartOwner,
+  SpanTask,
   TaskDescDrawer,
+  TaskItems,
   TaskSubTaskLi,
   TaskSubTaskUl,
   TaskTitleDrawer,
+  TitleModal,
   TitleDrawer,
+  Status,
+  FilePart,
+  Image,
+  Files,
+  TaskData,
+  Due,
+  CommentPart,
 } from "./taskStyled";
 
 import moment from "moment";
@@ -23,7 +38,7 @@ const options = ["Delete", " Write Comments"];
 
 const ITEM_HEIGHT = 48;
 
-const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
+const TaskDrawerComponent = ({ task, tasks, setTasks, setTask }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -56,7 +71,6 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
     setIsModalOpen(true);
     if (option === "Delete") {
       const id = task.id;
-      // const dTasks = tasks.filter(task => task.id !== id);
       const dTasks = [...tasks].filter(task => task.id !== id);
       localStorage.setItem("tasks", JSON.stringify(dTasks));
       setTasks(dTasks);
@@ -77,7 +91,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
       status: "queue",
       files: " ",
       priority: "",
-      dueDate: moment().format("DD/MM/YY HH:mm"),
+      dueDate: moment().format("YY/DD/HH:mm"),
       subTasks: [],
       creationDate: moment().format("YY/DD/HH:mm"),
     });
@@ -85,7 +99,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
   //!update todo list
   const updateTask = (taskId, newValue) => {
     setTasks(prevTasks => {
-      return prevTasks.map(todo => {
+      const updatedTasks = prevTasks.map(todo => {
         if (todo.id === taskId) {
           return {
             ...todo,
@@ -104,9 +118,11 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
           return todo;
         }
       });
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+      return updatedTasks;
     });
-    console.log(newValue);
   };
+
   const handleEditClick = taskToEdit => {
     setEdit({
       id: taskToEdit.id,
@@ -121,9 +137,10 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
       subTasks: taskToEdit.subTasks,
       creationDate: taskToEdit.creationDate,
     });
-    console.log(taskToEdit);
+
     setIsDrawerOpen(true);
   };
+  console.log(task.comment);
   return (
     <>
       <Drawer
@@ -136,35 +153,79 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
               backgroundImage: `url('/img/bac1.jpg')`,
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
+              overflowY: "auto",
+              maxHeight: "95vh",
             },
           },
         }}
       >
         <Box p={2} width="600px" role="presentation">
           <PartDrawer>
-            <TitleDrawer>this is the task you chose</TitleDrawer>
-            <Form
-              tasks={tasks}
-              setTasks={setTasks}
-              submitUpdate={submitUpdate}
-              edit={edit}
-              setEdit={setEdit}
-            />
+            <Img
+              src={"/img/arrow1.png"}
+              alt={"arrow"}
+              open={open}
+              onClick={() => setIsDrawerOpen(false)}
+            ></Img>
+            <TitleDrawer>{task.body}</TitleDrawer>
+            <FormPart>
+              <Form
+                tasks={tasks}
+                setTasks={setTasks}
+                submitUpdate={submitUpdate}
+                edit={edit}
+                setEdit={setEdit}
+              />
+            </FormPart>
             {task && (
               <>
-                <TaskTitleDrawer>Task Title: {task.title}</TaskTitleDrawer>
-                <TaskDescDrawer>Task Description: {task.body}</TaskDescDrawer>
-                {task.subTasks &&
-                  Array.isArray(task.subTasks) &&
-                  task.subTasks.length > 0 && (
+                <PartOwner>
+                  <TitleModal>
+                    <TaskTitleDrawer>
+                      <SpanTask>Task Title:</SpanTask>
+                      <TaskItems>{task.title}</TaskItems>
+                    </TaskTitleDrawer>
+                  </TitleModal>
+                  <ListPart>
                     <TaskSubTaskUl>
-                      {task.subTasks.map((subTask, index) => {
-                        return (
-                          <TaskSubTaskLi key={index}>{subTask}</TaskSubTaskLi>
-                        );
-                      })}
+                      {task.subTasks.split("\n").map((subTask, index) => (
+                        <TaskSubTaskLi key={index}>
+                          <SpanTask>Subtask::</SpanTask>
+                          <TaskItems> {subTask}</TaskItems>
+                        </TaskSubTaskLi>
+                      ))}
                     </TaskSubTaskUl>
-                  )}
+                  </ListPart>
+                  <Status>
+                    <SpanTask>Status::</SpanTask>
+                    <TaskItems> {task.status}</TaskItems>
+                  </Status>
+                  <FilePart>
+                    <Image
+                      src={task.image}
+                      alt=""
+                      style={{ maxWidth: "30%" }}
+                    />
+                    <Files>{task.files}</Files>
+                  </FilePart>
+                  <TaskData>
+                    <SpanTask>Initiate::</SpanTask>
+                    <TaskItems>
+                      {task.creationDate
+                        ? moment(task.dueDate).format("YY/DD/HH:mm")
+                        : "No creationDate date"}
+                    </TaskItems>
+                    <Due>
+                      <SpanTask> Deadline::</SpanTask>
+                      <TaskItems>
+                        {task.dueDate
+                          ? moment(task.dueDate).format("YY/DD/HH:mm")
+                          : "No due date"}
+                      </TaskItems>
+                    </Due>
+                  </TaskData>
+                  <Comment />
+                </PartOwner>
               </>
             )}
           </PartDrawer>

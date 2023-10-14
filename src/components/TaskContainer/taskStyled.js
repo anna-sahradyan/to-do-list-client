@@ -21,7 +21,6 @@ export const WrapperToDoList = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-around;
-  border: 1px solid black;
 `;
 /*Task*/
 export const WrapperTask = styled.div`
@@ -166,6 +165,11 @@ export const TaskBody = styled.div`
   font-size: 16px;
 `;
 export const SubTasksUl = styled.ul``;
+export const FilePart = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 5px 0 2px 0;
+`;
 
 export const CheckboxInput = styled.input``;
 export const SubTaskBox = styled.div`
@@ -187,38 +191,84 @@ export const Due = styled.p`
   font-weight: 600;
 `;
 export const Files = styled.p`
-  margin: 20px 0 5px 0;
   color: #ab907f;
   font-size: 14px;
   font-weight: 600;
+  margin: 0 0 0 5px;
 `;
-/*TaskDrawerComponent component*/
-export const Drag = styled.div``;
-export const Status = styled.div`
+/* todo =======TaskDrawerComponent component===========*/
+export const PartOwner = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & span {
+    margin: 0 0 10px 0;
+  }
+`;
+export const TaskTitleDrawer = styled.div`
+  display: flex;
+
+  & span {
+    font-size: 16px;
+  }
+`;
+export const TitleModal = styled.div`
+  max-width: 80%;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const ListPart = styled.div`
   width: 30%;
-  color: white;
 `;
 export const PartDrawer = styled.div`
-  width: 90%;
-  border: 1px solid red;
+  position: relative;
+  width: 100%;
+  color: #54371b;
 `;
-export const TitleDrawer = styled.h1`
-  color: white;
+export const Status = styled.div`
+  width: 30%;
 `;
-export const TaskTitleDrawer = styled.h2`
-  color: white;
+export const CommentPart = styled.div``;
+export const TaskSubTaskUl = styled.ul``;
+export const FormPart = styled.p`
+  width: 250px;
+  margin-bottom: 20px;
 `;
-export const TaskDescDrawer = styled.div`
-  color: white;
+
+export const TitleDrawer = styled.div`
+  max-height: 180px;
+  max-width: 85%;
+  overflow: hidden;
+  word-wrap: break-word;
+  font-size: 18px;
+  text-align: center;
+  margin: auto auto 10px auto;
 `;
-export const TaskSubTask = styled.p`
-  color: white;
+
+export const SpanTask = styled.span`
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  color: darkgray;
 `;
-export const TaskSubTaskUl = styled.ul`
-  display: flex;
+export const TaskItems = styled.span`
+  display: inline-block;
+  flex: 1;
 `;
+export const Img = styled.img`
+  width: 20px;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: ${props => (props.open ? "rotate(0deg)" : "rotate(180deg)")};
+    cursor: pointer;
+  }
+`;
+
+
 export const TaskSubTaskLi = styled.li`
-  color: black;
+
 `;
 
 /*SearchTask Component*/
