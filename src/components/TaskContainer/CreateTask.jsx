@@ -4,7 +4,6 @@ import SearchTasks from "./SearchTasks";
 import Form from "./Form";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment/moment";
-import Comment from "./Comment";
 
 const CreateTask = ({ tasks, setTasks }) => {
   const [selectedFiles, setSelectedFiles] = useState(null);
@@ -33,8 +32,6 @@ const CreateTask = ({ tasks, setTasks }) => {
           />
           <SearchTasks tasks={tasks} task={task} setTasks={setTasks} />
         </Nav>
-
-        {task.commit && <Comment task={task} setTask={setTask} />}
       </Wrapper>
     </>
   );

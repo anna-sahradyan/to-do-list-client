@@ -48,6 +48,7 @@ const Form = ({ setTasks, submitUpdate, edit }) => {
 
   const handleClose = () => {
     setOpen(false);
+    setTask("");
   };
   const handleFileChange = e => {
     const file = e.target.files[0];
@@ -98,26 +99,10 @@ const Form = ({ setTasks, submitUpdate, edit }) => {
       files: " ",
       priority: "",
       dueDate: moment().format("YY/DD/HH:mm"),
-      subTasks: [],
+      subTasks: "",
       creationDate: moment().format("YY/DD/HH:mm"),
     });
     setSelectedFiles(null);
-  };
-
-  const handleAddSubTask = () => {
-    let subTasksArray = (task.subTasks || "").toString();
-    subTasksArray = subTasksArray.split("\n").map(subTask => subTask.trim());
-
-    const nonEmptySubTasks = subTasksArray.filter(subTask => subTask !== "");
-
-    if (
-      nonEmptySubTasks.length === 0 ||
-      nonEmptySubTasks.every(subTask => subTask === "")
-    ) {
-      toast("Please enter at least one sub-task.");
-    } else {
-      setTask({ ...task, subTasks: nonEmptySubTasks.join("\n") });
-    }
   };
 
   return (
@@ -180,7 +165,6 @@ const Form = ({ setTasks, submitUpdate, edit }) => {
               value={task.subTasks}
               onChange={e => setTask({ ...task, subTasks: e.target.value })}
             />
-            <Button onClick={handleAddSubTask}>Add Sub-Task</Button>
             <UploadFile handleFileChange={handleFileChange} />
           </FormControl>
         </DialogContent>

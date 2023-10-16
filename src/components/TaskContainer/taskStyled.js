@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { Chip, DialogTitle } from "@mui/material";
-import { Button } from "@mui/material";
+
 /*CreateTask*/
 export const Wrapper = styled.div`
   width: 100%;
@@ -39,7 +39,7 @@ export const ButtonTask = styled(Chip)`
   width: 100px;
   left: 30px;
 `;
-export const TitleTask = styled.div``;
+
 export const HeaderBox = styled.div`
   position: sticky;
   top: 0;
@@ -104,14 +104,14 @@ export const TaskHidden = styled.div`
   width: 20%;
   height: 30px;
   display: flex;
-  //opacity: 0;
+  opacity: 0;
   transition: opacity 0.3s ease;
   margin-left: auto;
 
   &:hover,
   :focus,
   :active {
-    //opacity: 1;
+    opacity: 1;
   }
 `;
 export const TaskHeader = styled.div`
@@ -185,12 +185,12 @@ export const TaskDown = styled.div`
 export const Image = styled.img`
   margin-bottom: 20px;
 `;
-export const Due = styled.p`
+export const Due = styled.div`
   color: #267cb5;
   font-size: 14px;
   font-weight: 600;
 `;
-export const Files = styled.p`
+export const Files = styled.div`
   color: #ab907f;
   font-size: 14px;
   font-weight: 600;
@@ -229,9 +229,9 @@ export const PartDrawer = styled.div`
 export const Status = styled.div`
   width: 30%;
 `;
-export const CommentPart = styled.div``;
+
 export const TaskSubTaskUl = styled.ul``;
-export const FormPart = styled.p`
+export const FormPart = styled.div`
   width: 250px;
   margin-bottom: 20px;
 `;

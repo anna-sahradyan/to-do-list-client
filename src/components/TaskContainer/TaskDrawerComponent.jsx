@@ -6,7 +6,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Box, Drawer } from "@mui/material";
 import toast from "react-hot-toast";
-import Comment from "./Comment";
 import Form from "./Form";
 
 import {
@@ -16,7 +15,6 @@ import {
   PartDrawer,
   PartOwner,
   SpanTask,
-  TaskDescDrawer,
   TaskItems,
   TaskSubTaskLi,
   TaskSubTaskUl,
@@ -29,16 +27,16 @@ import {
   Files,
   TaskData,
   Due,
-  CommentPart,
 } from "./taskStyled";
 
 import moment from "moment";
+import CommentList from "../Comment/CommentList";
 
 const options = ["Delete", " Write Comments"];
 
 const ITEM_HEIGHT = 48;
 
-const TaskDrawerComponent = ({ task, tasks, setTasks, setTask }) => {
+const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -54,7 +52,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks, setTask }) => {
     files: "",
     dueDate: moment().format("YY/DD/HH:mm"),
     priority: "",
-    subTasks: [],
+    subTasks: "",
     creationDate: moment().format("YY/DD/HH:mm"),
   });
   //!part move
@@ -78,7 +76,17 @@ const TaskDrawerComponent = ({ task, tasks, setTasks, setTask }) => {
     } else {
       setIsDrawerOpen(true);
     }
+    if (option === "Write Comments") {
+      setIsDrawerOpen(false);
+    } else {
+      setIsDrawerOpen(true);
+      const intervalId = setInterval(() => {
+        setAnchorEl(null);
+        clearInterval(intervalId);
+      }, 300);
+    }
   };
+
   //?part of edit with submit
   const submitUpdate = (taskId, newValue) => {
     updateTask(taskId, newValue);
@@ -92,7 +100,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks, setTask }) => {
       files: " ",
       priority: "",
       dueDate: moment().format("YY/DD/HH:mm"),
-      subTasks: [],
+      subTasks: "",
       creationDate: moment().format("YY/DD/HH:mm"),
     });
   };
@@ -137,10 +145,8 @@ const TaskDrawerComponent = ({ task, tasks, setTasks, setTask }) => {
       subTasks: taskToEdit.subTasks,
       creationDate: taskToEdit.creationDate,
     });
-
     setIsDrawerOpen(true);
   };
-  console.log(task.comment);
   return (
     <>
       <Drawer
@@ -154,7 +160,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks, setTask }) => {
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
               overflowY: "auto",
-              maxHeight: "95vh",
+              maxHeight: "100vh",
             },
           },
         }}
@@ -224,7 +230,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks, setTask }) => {
                       </TaskItems>
                     </Due>
                   </TaskData>
-                  <Comment />
+                  <CommentList task={task} />
                 </PartOwner>
               </>
             )}
