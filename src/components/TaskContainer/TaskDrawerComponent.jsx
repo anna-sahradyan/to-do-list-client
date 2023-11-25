@@ -216,11 +216,7 @@ const TaskDrawerComponent = ({ task, tasks, setTasks }) => {
                   </FilePart>
                   <TaskData>
                     <SpanTask>Initiate::</SpanTask>
-                    <TaskItems>
-                      {task.creationDate
-                        ? moment(task.dueDate).format("YY/DD/HH:mm")
-                        : "No creationDate date"}
-                    </TaskItems>
+                    <TaskItems>{moment().format("YY/DD/HH:mm")}</TaskItems>
                     <Due>
                       <SpanTask> Deadline::</SpanTask>
                       <TaskItems>

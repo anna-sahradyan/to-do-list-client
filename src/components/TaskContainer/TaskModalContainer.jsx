@@ -115,10 +115,8 @@ const TaskModalContainer = ({ tasks, task, setTasks, index }) => {
         </TaskInfo>
         <TaskDown>
           <TaskData>
-            Initiate:{" "}
-            {task.creationDate
-              ? moment(task.dueDate).format("YY/DD/HH:mm")
-              : "No creationDate date"}
+            Initiate:
+            {moment().format("YY/DD/HH:mm")}
           </TaskData>
           <TaskHidden>
             <TaskDrawerComponent

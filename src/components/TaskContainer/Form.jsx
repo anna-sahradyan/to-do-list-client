@@ -30,7 +30,6 @@ const Form = ({ setTasks, submitUpdate, edit }) => {
       dueDate: moment().format("YY/DD/HH:mm"),
       priority: "",
       subTasks: "",
-      creationDate: moment().format("YY/DD/HH:mm"),
       files: selectedFiles,
     };
 
@@ -100,7 +99,6 @@ const Form = ({ setTasks, submitUpdate, edit }) => {
       priority: "",
       dueDate: moment().format("YY/DD/HH:mm"),
       subTasks: "",
-      creationDate: moment().format("YY/DD/HH:mm"),
     });
     setSelectedFiles(null);
   };

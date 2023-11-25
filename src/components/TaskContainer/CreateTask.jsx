@@ -17,7 +17,6 @@ const CreateTask = ({ tasks, setTasks }) => {
     dueDate: moment().format("YY/DD/HH:mm"),
     priority: "",
     subTasks: "",
-    creationDate: moment().format("YY/DD/HH:mm"),
     files: selectedFiles,
   });
   return (
